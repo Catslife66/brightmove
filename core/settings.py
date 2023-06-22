@@ -195,7 +195,7 @@ SOCIALACCOUNT_PROVIDERS = {
 
 
 # Google map api
-GOOGLE_MAP_API_KEY = 'AIzaSyAZW0nOnM0_FwXvQj1H2p__ETTWy75eRdQ'
+GOOGLE_MAP_API_KEY = os.getenv('GOOGLE_MAP_API_KEY')
 
 
 # Email backend setting
