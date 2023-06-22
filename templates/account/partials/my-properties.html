@@ -1,0 +1,63 @@
+<section class="bg-white dark:bg-gray-900">
+    {% if qs %}
+    <div class="p-4 md:ml-64 h-auto pt-20">
+        {% for obj in qs %}
+        <div class="border-b py-2">
+            <a href="{% url 'property:property-detail' obj.pk %}" class="flex flex-row justify-center mx-auto lg:w-2/3 md:max-w-full my-8 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
+                <div class="w-1/2">
+                    <div class="grid grid grid-cols-3">
+                        {% for img in obj.images.all %}
+                        {% if img.is_feature %}
+                        <div class="col-span-2">
+                            <img class="h-auto max-w-full" src="{{ img.image.url }}" alt="{{ img.image.alt_text }}">
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                        <div class="col-span-1">
+                            {% for img in obj.images.all %}
+                            {% if not img.is_feature and forloop.counter <= 3 %}
+                            <img class="h-auto max-w-full" src="{{ img.image.url }}" alt="{{ img.image.alt_text }}">
+                            {% endif %}
+                            {% endfor %}
+                        </div> 
+        
+                    </div>
+                </div>
+                <div class="flex flex-col w-1/2 space-y-2 leading-normal">
+                    <div class="flex flex-row justify-between">
+                        <h3 class="px-4 mt-4 text-xl font-bold tracking-tight text-gray-900 dark:text-white">{{ obj.property_address }}</h5>
+                    </div>  
+                    <div class="flex flex-row px-4 space-x-4">
+                        <h5>Type: {{ obj.property_feature.property_type }}</h5>
+                        <h5>Rooms: {{ obj.property_feature.bedroom }}</h5>
+                        <h5>Toilets: {{ obj.property_feature.toilet }}</h5>
+                    </div>
+                    <span class="px-4 text-lakeBlue font-bold">Added at {{ obj.added_at }}</span>
+                    <p class="px-4 font-normal text-gray-700 dark:text-gray-400">{{ obj.description|slice:":250" }}....</p>
+                    <div class="flex flex-row grow justify-between items-center bg-lakeBlue">
+                        <div class="text-white px-4 text-xl tracking-wide font-bold">{{ obj.property_price.price_type }}</div>
+                        <div class="text-white px-4 text-xl tracking-wide font-bold">£ {{ obj.property_price.price|floatformat:"-3g"}}</div>
+                    </div>
+                </div>
+            </a>
+            <div class="max-w-screen-xl px-4 py-4 mx-auto text-center lg:py-4">
+                <dl class="max-w-screen-md flex flex-row justify-center mx-auto  space-x-6 text-gray-900 dark:text-white">
+                    <div class="flex flex-col items-center justify-center">
+                        <dt class="mb-2 text-3xl md:text-4xl font-extrabold">{{ obj.views_count }}</dt>
+                        <dd class="font-light text-gray-500 dark:text-gray-400">viewed</dd>
+                    </div>
+                    <div class="flex flex-col items-center justify-center">
+                        <dt class="mb-2 text-3xl md:text-4xl font-extrabold">{{ obj.wishlist.count }}</dt>
+                        <dd class="font-light text-gray-500 dark:text-gray-400">Liked</dd>
+                    </div>
+                </dl>
+            </div>
+            <a href="{% url 'property:update-property' obj.pk %}" class="text-white bg-lakeBlue hover:bg-darkNavy focus:ring-4 focus:ring-lakelue font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:focus:ring-primary-800">Edit property</a>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p>You have not uploaded any properties yet.</p>
+    {% endif %}
+
+</section>

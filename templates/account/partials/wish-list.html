@@ -1,0 +1,55 @@
+<div class="p-4 md:ml-64 h-auto pt-20">
+    {% if wish_list %}
+    {% for item in wish_list %}
+    <a href="{% url 'property:property-detail' item.property.pk %}" class="flex flex-row justify-center mx-auto lg:w-2/3 md:max-w-full my-8 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
+        <div class="w-1/2">
+            <div class="grid grid grid-cols-3">
+                {% for img in item.property.images.all %}
+                {% if img.is_feature %}
+                <div class="col-span-2">
+                    <img class="h-auto max-w-full" src="{{ img.image.url }}" alt="{{ img.image.alt_text }}">
+                </div>
+                {% endif %}
+                {% endfor %}
+
+                <div class="col-span-1">
+                    {% for img in item.property.images.all %}
+                    {% if not img.is_feature and forloop.counter <= 3 %}
+                    <img class="h-auto max-w-full" src="{{ img.image.url }}" alt="{{ img.image.alt_text }}">
+                    {% endif %}
+                    {% endfor %}
+                </div> 
+
+            </div>
+        </div>
+        <div class="flex flex-col w-1/2 space-y-2 leading-normal">
+            <div class="flex flex-row justify-between">
+                <h3 class="px-4 mt-4 text-xl font-bold tracking-tight text-gray-900 dark:text-white">{{ item.property.property_address }}</h5>
+                    <div class="liked w-8 z-10">
+                        <svg fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                            <path d="M9.653 16.915l-.005-.003-.019-.01a20.759 20.759 0 01-1.162-.682 22.045 22.045 0 01-2.582-1.9C4.045 12.733 2 10.352 2 7.5a4.5 4.5 0 018-2.828A4.5 4.5 0 0118 7.5c0 2.852-2.044 5.233-3.885 6.82a22.049 22.049 0 01-3.744 2.582l-.019.01-.005.003h-.002a.739.739 0 01-.69.001l-.002-.001z"></path>
+                        </svg>
+                    </div>
+            </div>  
+            <div class="flex flex-row px-4 space-x-4">
+                <h5>Type: {{ item.property.property_feature.property_type }}</h5>
+                <h5>Rooms: {{ item.property.property_feature.bedroom }}</h5>
+                <h5>Toilets: {{ item.property.property_feature.toilet }}</h5>
+            </div>
+            <span class="px-4 text-lakeBlue font-bold">Added at {{ item.property.added_at }}</span>
+            <p class="px-4 font-normal text-gray-700 dark:text-gray-400">{{ item.property.description|slice:":250" }}....</p>
+            <div class="flex flex-row grow justify-between items-center bg-lakeBlue">
+                <div class="text-white px-4 text-xl tracking-wide font-bold">{{ item.property.property_price.price_type }}</div>
+                <div class="text-white px-4 text-xl tracking-wide font-bold">£ {{ item.property.property_price.price|floatformat:"-3g"}}</div>
+            </div>
+        </div>
+    </a>
+    {% endfor %}
+    {% else %}
+    <p>You have not saved any properties.</p>
+    {% endif %}
+    
+</div>
+
+
+

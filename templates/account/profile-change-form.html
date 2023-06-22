@@ -1,0 +1,49 @@
+{% load i18n static %}
+{% load widget_tweaks %}
+
+{% if messages.success %}
+{% for msg in messages.success %}
+<div class="p-4 mb-4 text-sm text-success rounded-lg bg-successBg dark:bg-gray-800 dark:text-green-400" role="alert">
+    <svg aria-hidden="true" class="flex-shrink-0 inline w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg> 
+    {{ msg }}
+</div>
+{% endfor %}
+{% endif %}
+
+<form method="post" action="." class="space-y-6 md:space-y-6 py-4 mb-4 border-b">
+    {% csrf_token %}
+    <legend class="text-2xl text-darkNavy font-semibold">Change your profile</legend>
+    <div>
+      <label for="{{ form.username.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ form.username.label_tag }}</label>
+      {% render_field form.username class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" %}
+        {% if form.username.errors %}
+        <div class="errorlist nonfield p-4 mb-4 text-sm text-redDark rounded-lg bg-redLight dark:bg-gray-800 dark:text-red-400" role="alert">
+            <p>{{ form.username.errors }}</p>
+        </div>
+        {% endif %}
+    </div>
+    <div>
+        <label for="{{ form.email.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ form.email.label_tag }}</label>
+        {% render_field form.email class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" %}
+          {% if form.email.errors %}
+          <div class="errorlist nonfield p-4 mb-4 text-sm text-redDark rounded-lg bg-redLight dark:bg-gray-800 dark:text-red-400" role="alert">
+              <p>{{ form.email.errors }}</p>
+          </div>
+          {% endif %}
+    </div>
+    <div class="flex items-start">
+        <div class="flex items-center h-5">
+          {% render_field form.is_agent class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-lakeBlue dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800" %}
+        </div>
+        <div class="ml-3 text-sm">
+          <label for="{{ form.is_agent.id_for_label }}" class="font-semibold text-gray-500 dark:text-gray-300">I am an agent.</label>
+        </div>
+    </div>
+
+    <button hx-post="{% url 'account:change-profile' %}"
+        hx-trigger="click"
+        hx-target="#profile-form"
+        hx-swap="innerHTML"
+        type="submit" class="text-white bg-lakeBlue hover:bg-darkNavy focus:ring-4 focus:outline-none focus:ring-lakeBlue font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Change profile</button>
+</form>
+

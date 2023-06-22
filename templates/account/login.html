@@ -1,0 +1,103 @@
+{% extends 'sub_base.html' %}
+{% load widget_tweaks %}
+{% load socialaccount %}
+
+{% block content %}
+<section class="bg-bgLakeBlue dark:bg-gray-900 h-screen">
+    <nav class="flex justify-center mx-auto py-4 mb-10" aria-label="Breadcrumb">
+        <ol class="inline-flex items-center space-x-1 md:space-x-3">
+            <li class="inline-flex items-center">
+            <a href="{% url 'index' %}" class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white">
+                <svg aria-hidden="true" class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
+                Home
+            </a>
+            </li>
+            <li aria-current="page">
+                <div class="flex items-center">
+                    <svg aria-hidden="true" class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
+                    <span class="ml-1 text-sm font-medium text-gray-500 md:ml-2 dark:text-gray-400">Login</span>
+                </div>
+            </li>
+        </ol>
+    </nav>
+    <div class="flex flex-col items-center justify-center px-6 py-8 mt-10 mx-auto lg:py-0">
+        {% if messages.info %}
+        <div id="toast-default" class="flex items-center w-full max-w-xs p-2 text-gray-500 bg-white rounded-lg shadow dark:text-gray-400 dark:bg-gray-800" role="alert">
+            <div class="ml-3 text-sm font-normal">
+                {% for msg in messages %}
+                <p class="py-2">{{ msg }}</p>
+                {% endfor %}
+            </div>
+            <button type="button" class="ml-auto -mx-1.5 -my-1.5 bg-white text-gray-400 hover:text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-gray-100 inline-flex h-8 w-8 dark:text-gray-500 dark:hover:text-white dark:bg-gray-800 dark:hover:bg-gray-700" data-dismiss-target="#toast-default" aria-label="Close">
+                <span class="sr-only">Close</span>
+                <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+            </button>
+        </div>
+        {% endif %}
+        <div class="py-4">
+            <a href="{% url 'index' %}" class="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
+                BrightMove   
+            </a>
+        </div>
+        <div class="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
+            <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
+                <h1 class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+                    Sign in to your account
+                </h1>
+                <form class="space-y-4 md:space-y-6" action="{% url 'account:login' %}" method="post">
+                    {% csrf_token %}
+                    
+                    {% if form.errors %}
+                    <div class="errorlist nonfield p-4 mb-4 text-sm text-redDark rounded-lg bg-redLight dark:bg-gray-800 dark:text-red-400" role="alert">
+                        <p>{{ form.non_field_errors }}</p>
+                    </div>
+                    {% endif %}
+                    <div>
+                        <label for="{{ form.username.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ form.username.label }}</label>
+                        {% render_field form.username class+='bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-lakeBlue focus:border-lakeBlue block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500' %}
+                        {% if form.username.errors %}
+                            <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
+                            {% for error in form.username.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div>
+                        <label for="{{ form.password.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ form.password.label }}</label>
+                        {% render_field form.password class+='bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-lakeBlue focus:border-lakeBlue block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500' %}
+                        {% if form.password.errors %}
+                            <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
+                            {% for error in form.password.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-start">
+                            <div class="flex items-center h-5">
+                                {% render_field form.remember_me class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-lakeBlue dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800" %}
+                            </div>
+                            <div class="ml-3 text-sm">
+                                <label for="{{ form.remember_me.id_for_label }}" class="text-gray-500 dark:text-gray-300">{{ form.remember_me.label }}</label>
+                            </div>
+                        </div>
+                        <a href="#" class="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500">Forgot password?</a>
+                    </div>
+                    <button type="submit" class="w-full text-white bg-lakeBlue hover:bg-darkNavy focus:ring-4 focus:outline-none focus:ring-lakeBlue font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Sign in</button>
+                    <a type="button" href="{% provider_login_url 'google' %}" class="w-full text-white text-center bg-lakeBlue hover:bg-darkNavy focus:ring-4 focus:outline-none focus:ring-[#4285F4]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-[#4285F4]/55 mr-2 mb-2">
+                        <div class="flex flex-row flex-1 justify-center">
+                            <svg class="w-4 h-4 mr-2 -ml-1" aria-hidden="true" focusable="false" data-prefix="fab" data-icon="google" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 488 512"><path fill="currentColor" d="M488 261.8C488 403.3 391.1 504 248 504 110.8 504 0 393.2 0 256S110.8 8 248 8c66.8 0 123 24.5 166.3 64.9l-67.5 64.9C258.5 52.6 94.3 116.6 94.3 256c0 86.5 69.1 156.6 153.7 156.6 98.2 0 135-70.4 140.8-106.9H248v-85.3h236.1c2.3 12.7 3.9 24.9 3.9 41.4z"></path></svg>
+                            Sign in with Google
+                        </div>
+                    </a>
+                    <p class="text-sm font-light text-gray-500 dark:text-gray-400">
+                        Don’t have an account yet? <a href="{% url 'account:register' %}" class="font-medium text-primary-600 hover:underline dark:text-primary-500">Sign up</a>
+                    </p>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

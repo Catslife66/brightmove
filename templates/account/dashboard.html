@@ -1,0 +1,56 @@
+{% extends 'sub_base.html' %}
+
+{% block nav %}{% include 'component/header.html' %}{% endblock %}
+{% block content %}
+<div class="bg-gray-50 dark:bg-gray-900 flex flex-row">
+    <!-- Sidebar -->
+    <aside id="default-sidebar" class="z-40 w-64 h-screen" aria-label="Sidenav">
+        <div class="overflow-y-auto py-8 h-full bg-white border-r border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+            <ul class="space-y-4">
+                <li class="py-4 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group" aria-current="page">
+                    <a href="{% url 'account:dashboard' %}" class="flex flex-row flex-1 mx-4 items-center">
+                        <svg aria-hidden="true" class="w-6 h-6 text-gray-400 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path><path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path></svg>
+                        <span class="ml-3 text-lakeBlue font-semibold">My account</span>
+                    </a>
+                </li>
+                
+                <li class="py-4 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                    <button class="flex flex-row flex-1 mx-4 items-center"
+                        hx-get="{% url 'account:wish-list' %}"
+                        hx-trigger="click"
+                        hx-target="#main-content"
+                        hx-swap="innerHTML">
+                        <svg aria-hidden="true" class="w-6 h-6 text-gray-400 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path><path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path></svg>
+                        <span class="ml-3 text-lakeBlue font-semibold">Saved property</span>
+                    </button>
+                </li>
+
+                <li class="py-4 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                    <a href="{% url 'property:upload' %}" class="flex flex-row flex-1 mx-4 items-center">
+                        <svg aria-hidden="true" class="w-6 h-6 text-gray-400 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path><path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path></svg>
+                        <span class="ml-3 text-lakeBlue font-semibold">Sell my property</span>
+                    </a>
+                </li>
+                <li class="py-4 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                    <button class="flex flex-row flex-1 mx-4 items-center"
+                        hx-get="{% url 'account:my-properties' %}"
+                        hx-trigger="click"
+                        hx-target="#main-content"
+                        hx-swap="innerHTML">
+                        <svg aria-hidden="true" class="w-6 h-6 text-gray-400 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path><path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path></svg>
+                        <span class="ml-3 text-lakeBlue font-semibold">My property</span>
+                    </button>
+                </li>
+            </ul>
+            
+        </div>
+    </aside>
+    
+    <main class="p-4 md:ml-64 h-auto pt-20 flex-1" id="main-content">
+        
+        <div id="profile-form">{% include 'account/profile-change-form.html' with form=profile_form %}</div>
+        <div id="password-form">{% include 'account/password-change-form.html' with form=password_form %}</div>
+    </main>
+  </div>
+
+{% endblock %}

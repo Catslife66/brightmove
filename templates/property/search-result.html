@@ -1,0 +1,107 @@
+{% extends 'sub_base.html' %}
+{% load static %}
+
+{% block content %}
+{% include 'component/header.html' %}
+
+
+<section class="w-full">
+    <div class="flex flex-row items-center justify-between mx-auto lg:w-2/3 md:max-w-full my-8 bg-white border border-gray-200 shadow hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
+        <div>{{ qs.count }} {% if qs.count <= 1 %} result {% else %} results {% endif %}</div>
+        <div class="flex flex-row items-center">
+            <span>Sort by</span>
+            <form action="" 
+                hx-get="{% url 'property:sort-by' %}"
+                hx-trigger="change"
+                hx-target="#sort-target"
+                hx-swap="innerHTML">
+                <input type="hidden" value="{{ location }}" name="q">
+                <select name="sort-by" id="sort-by">
+                    <option value="0" selected>Default</option>
+                    <option value="1">Highest Price</option>
+                    <option value="2">Lowest Price</option>
+                    <option value="3">Newest Listed</option>
+                    <option value="4">Oldest Listed</option>
+                </select>
+            </form>
+        </div>
+        <div class="relative">
+            <button id="dropdownDefaultButton" data-dropdown-toggle="dropdown" class="text-sm px-4 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">Filter</button>
+            <!-- Dropdown menu -->
+            <div id="dropdown" class="absolute w-screen overflow-hidden z-10 hidden bg-white dark:bg-gray-700">
+                <form aria-labelledby="dropdownDefaultButton" class="flex"
+                    hx-get="{% url 'property:filter-search' %}"
+                    hx-trigger="submit"
+                    hx-target="#sort-target"
+                    hx-swap="innerHTML"
+                    >
+                    <input type="hidden" value="{{ location }}" name="q">
+                    <p>Price range:</p>
+                    <label for="minPrice">Min:</label>
+                    <input type="text" id="minPrice" name="minPrice">
+                    <label for="maxPrice">Max:</label>
+                    <input type="text" id="maxPrice" name="maxPrice">
+
+                    <p>No. of bedrooms:</p>
+                    <label for="minBeds">Min:</label>
+                    <input type="text" id="minBeds" name="minBeds">
+                    <label for="maxBeds">Max:</label>
+                    <input type="text" id="maxBeds" name="maxBeds">
+
+                    <label for="propertyType">Property type:</label>
+                    <select name="propertyType" id="propertyType">
+                        <option value="Detached">Detached</option>
+                        <option value="Semi-detached">Semi-detached</option>
+                        <option value="Flat">Flat</option>
+                        <option value="Bangalow">Bangalow</option>
+                    </select>
+                    <button type="submit">Find properties</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="sort-target" class="transition-all duration-300">
+    {% for obj in qs %} 
+    <a href="{% url 'property:property-detail' obj.pk %}" class="flex flex-row justify-center mx-auto lg:w-2/3 md:max-w-full my-8 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
+        <div class="w-1/2">  
+            <div class="grid grid grid-cols-3">
+                {% for img in obj.images.all %}
+                {% if img.is_feature %}
+                <div class="col-span-2">
+                    <img class="h-auto max-w-full" src="{{ img.image.url }}" alt="{{ img.image.alt_text }}">
+                </div>
+                {% endif %}
+                {% endfor %}
+
+                <div class="col-span-1">
+                    {% for img in obj.images.all %}
+                    {% if not img.is_feature and forloop.counter <= 3 %}
+
+                    <img class="h-auto max-w-full" src="{{ img.image.url }}" alt="{{ img.image.alt_text }}">
+                    {% endif %}
+                    {% endfor %}
+                </div> 
+            </div>
+        </div>
+        <div class="flex flex-col w-1/2 space-y-2 leading-normal">
+            <h3 class="px-4 mt-4 text-xl font-bold tracking-tight text-gray-900 dark:text-white">{{ obj.property_address }}</h5>
+            <div class="flex flex-row px-4 space-x-4">
+                <h5>Type: {{ obj.property_feature.property_type }}</h5>
+                <h5>Rooms: {{ obj.property_feature.bedroom }}</h5>
+                <h5>Toilets: {{ obj.property_feature.toilet }}</h5>
+            </div>
+            <span class="px-4 text-lakeBlue font-bold">Added at {{ obj.added_at }}</span>
+            <p class="px-4 font-normal text-gray-700 dark:text-gray-400">{{ obj.description|slice:":250" }}....</p>
+            <div class="flex flex-row grow justify-between items-center bg-lakeBlue">
+                <div class="text-white px-4 text-xl tracking-wide font-bold">{{ obj.property_price.price_type }}</div>
+                <div class="text-white px-4 text-xl tracking-wide font-bold">£ {{ obj.property_price.price|floatformat:"-3g"}}</div>
+            </div>
+        </div>
+    </a>
+    {% endfor %}
+    </div>
+</section>
+
+
+{% endblock %}

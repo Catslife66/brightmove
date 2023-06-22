@@ -1,0 +1,155 @@
+{% extends 'sub_base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block content %}
+
+{% include 'component/header.html' %}
+
+<form action="." method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <!-- address form -->
+    <div class="py-8 px-4 mx-auto border-b max-w-2xl lg:py-16">
+        <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Property Address</h2>
+        <div class="grid gap-4 grid-cols-3 sm:grid-cols-2 sm:gap-6">
+            <div class="w-full col-span-3">
+                <label for="{{ address_form.line_1.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Street address</label>
+                {% render_field address_form.line_1 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" %}
+            </div>
+            <div class="w-full col-span-3">
+                <label for="{{ address_form.line_2.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Street address 2 <span class="text-gray-400">(Optional)</span></label>
+                {% render_field address_form.line_2 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" %}
+            </div>
+            
+            <div class="col-span-1">
+                <label for="{{ address_form.town.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Town/City</label>
+                {% render_field address_form.town class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" %}
+            </div>
+            <div class="col-span-1">
+                <label for="{{ address_form.region.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Region <span class="text-gray-400">(Optional)</span></label>
+                {% render_field address_form.region class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" %}
+            </div>
+            <div class="col-span-1">
+                <label for="{{ address_form.postcode.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Postcode</label>
+                {% render_field address_form.postcode class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" %}
+            </div>
+        </div>
+    </div>
+
+    <!-- feature form -->
+    <div class="py-8 px-4 mx-auto border-b max-w-2xl lg:py-16">
+        <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Property Feature</h2>
+        <div class="grid gap-4 grid-cols-3">
+            <div class="col-span-1">
+                <label for="{{ feature_form.property_type.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Property type</label>
+                {% render_field feature_form.property_type class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" %}
+            </div>
+            <div class="col-span-1">
+                <label for="{{ feature_form.bedroom.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Number of bedrooms</label>
+                {% render_field feature_form.bedroom class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" min="1" %}
+            </div>
+            <div class="col-span-1">
+                <label for="{{ feature_form.toilet.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Number  of toilets</label>
+                {% render_field feature_form.toilet class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" min="1" %}
+            </div>
+        </div>
+    </div>
+
+    <!-- price form -->
+    <div class="py-8 px-4 mx-auto border-b max-w-2xl lg:py-16">
+        <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Price for Property</h2>
+        <div class="grid gap-4 grid-cols-3 sm:grid-cols-2 sm:gap-6">
+            <div class="col-span-1">
+                <label for="{{ price_form.price_type.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Price type</label>
+                {% render_field price_form.price_type class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" %}
+            </div>
+            <div class="col-span-1">
+                <label for="{{ price_form.price.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Price (Stirlings)</label>
+                {% render_field price_form.price class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" %}
+            </div>
+        </div>
+    </div>
+
+    <!-- property description -->
+    <div class="py-8 px-4 mx-auto border-b max-w-2xl lg:py-16">
+        <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Property Detail</h2>
+        <div class="grid gap-4 grid-cols-3 sm:grid-cols-2 sm:gap-6">
+            <div class="col-span-3">
+                <label for="{{ property_upload_form.description.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Description</label>
+                {% render_field property_upload_form.description class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" name="description" %}
+            </div>
+        </div>
+    </div>
+
+    <!-- management_form -->
+    {{ formset.management_form }}
+    <!-- property image formset -->
+    <div class="py-8 px-4 mx-auto max-w-2xl lg:py-16">
+        <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Add Property Images</h2>
+        <div id="target-container">
+            {% for form in formset.forms %}
+                <div class="py-4 border-b">
+                    <div class="grid justify-items-end">
+                        <div class="flex flex-row">
+                            {% render_field form.DELETE class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" %}
+                            <label for="{{ form.DELETE.id_for_label }}" class="block text-sm font-medium text-gray-900 dark:text-white">Delete</label>
+                        </div>
+                    </div>
+                    <div class="grid gap-4 grid-cols-3 sm:grid-cols-2 sm:gap-6">
+                        <div class="col-span-3">
+                            <label for="{{ form.image.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Upload image file</label>
+                            {% render_field form.image class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" %}
+                        </div>
+                        <div class="col-span-1">
+                            <label for="{{ form.alt_text.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Image name</label>
+                            {% render_field form.alt_text class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" %}
+                        </div>
+                        
+                        <div class="col-span-1 flex flex-row space-x-2 items-end">
+                            {% render_field form.is_feature class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" %}
+                            <label for="{{ form.is_feature.id_for_label }}" class="block text-sm font-medium text-gray-900 dark:text-white">Set to feature image</label>
+                        </div>
+                        {{ form.id }}
+                    </div>
+                </div>
+            {% endfor %}
+
+        </div>
+    </div>
+    
+    <div class="py-4 px-4 flex justify-between mx-auto max-w-2xl lg:py-8">
+        <button id="add-more-btn" class="text-white bg-lakeBlue hover:bg-darkNavy focus:ring-4 focus:ring-lakeBlue font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Add more images</button>
+        <button type="submit" class="text-white bg-lakeBlue hover:bg-darkNavy focus:ring-4 focus:ring-lakeBlue font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Submit</button>
+    </div>
+</form>
+
+<div id="empty-formset" class="hidden py-4 border-b">
+    <div class="grid justify-items-end">
+        <button class="delete relative inline-flex items-center justify-center text-redDark text-xs w-5 h-5 overflow-hidden bg-redLight rounded-full hover:bg-lakeBlue hover:text-white dark:bg-gray-600">
+            X
+        </button>
+    </div>
+    <div class="grid gap-4 grid-cols-3 sm:grid-cols-2 sm:gap-6">
+        <div class="col-span-3">
+            <label for="{{ formset.empty_form.image.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Upload image file</label>
+            {% render_field formset.empty_form.image class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" %}
+        </div>
+        <div class="col-span-1">
+            <label for="{{ formset.empty_form.alt_text.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Image name</label>
+            {% render_field formset.empty_form.alt_text class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" %}
+        </div>
+        
+        <div class="col-span-1 flex flex-row space-x-2 items-end">
+            {% render_field formset.empty_form.is_feature class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" %}
+            <label for="{{ formset.empty_form.is_feature.id_for_label }}" class="block text-sm font-medium text-gray-900 dark:text-white">Set to feature image</label>
+        </div>
+        {{ formset.empty_form.id }}
+    </div>
+</div>
+
+<script src="{% static 'js/property-upload.js' %}"></script>
+{% endblock %}
+
+
+
+Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nisi magnam laboriosam incidunt necessitatibus voluptatibus alias quaerat cumque numquam officiis quas? Sunt numquam nam rem unde obcaecati magnam vero veritatis suscipit?

@@ -1,0 +1,167 @@
+{% extends 'sub_base.html' %}
+{% load static %}
+{% block content %}
+{% include 'component/header.html' %}
+
+<section class="my-4">
+    <div class="flex flex-col mx-auto">
+        <div class="flex mx-auto w-2/3">
+            <div id="gallery" class="relative w-full" data-carousel="slide">
+                <!-- Carousel wrapper -->
+                <div class="relative h-full w-full overflow-hidden rounded-lg md:h-96">
+                    {% for img in obj.images.all %}
+                    <div class="hidden duration-700 ease-in-out" data-carousel-item="active">
+                        <img src="{{ img.image.url }}" class="absolute block max-w-full h-auto -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="{{ img.alt_text }}">
+                    </div>
+                    {% endfor %}
+                </div>
+                <!-- Slider controls -->
+                <button type="button" class="absolute top-0 left-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none" data-carousel-prev>
+                    <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-darkNavy dark:bg-gray-800/30 group-hover:bg-lakeBlue dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
+                        <svg aria-hidden="true" class="w-6 h-6 text-white dark:text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                        <span class="sr-only">Previous</span>
+                    </span>
+                </button>
+                <button type="button" class="absolute top-0 right-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none" data-carousel-next>
+                    <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-darkNavy dark:bg-gray-800/30 group-hover:bg-lakeBlue dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
+                        <svg aria-hidden="true" class="w-6 h-6 text-white dark:text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                        <span class="sr-only">Next</span>
+                    </span>
+                </button>
+            </div>
+        </div>
+
+        <div class="flex flex-row mx-auto justify-between space-x-4">
+            <!-- liked button -->
+            <button class="flex flex-row mx-auto" id="like-btn" data-id="{{ obj.id }}">
+                <div class="w-8">
+                    {% if liked %}
+                    <svg id="like-icon" fill="currentColor" stroke="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path d="M9.653 16.915l-.005-.003-.019-.01a20.759 20.759 0 01-1.162-.682 22.045 22.045 0 01-2.582-1.9C4.045 12.733 2 10.352 2 7.5a4.5 4.5 0 018-2.828A4.5 4.5 0 0118 7.5c0 2.852-2.044 5.233-3.885 6.82a22.049 22.049 0 01-3.744 2.582l-.019.01-.005.003h-.002a.739.739 0 01-.69.001l-.002-.001z"></path>
+                    </svg>
+                    {% else %}
+                    <svg id="like-icon" fill="none" stroke="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path d="M9.653 16.915l-.005-.003-.019-.01a20.759 20.759 0 01-1.162-.682 22.045 22.045 0 01-2.582-1.9C4.045 12.733 2 10.352 2 7.5a4.5 4.5 0 018-2.828A4.5 4.5 0 0118 7.5c0 2.852-2.044 5.233-3.885 6.82a22.049 22.049 0 01-3.744 2.582l-.019.01-.005.003h-.002a.739.739 0 01-.69.001l-.002-.001z"></path>
+                    </svg>
+                    {% endif %}
+                </div>
+            </button>
+            <a href="{% url 'property:email' obj.id %}" class="text-white bg-lakeBlue hover:bg-darkNavy focus:ring-4 focus:ring-lakeBlue font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Email Owner</a>
+        </div>
+        
+        <div class="py-8 px-4 mx-auto max-w-2xl lg:py-16" id="object" data-id="{{ obj.id }}">
+            <h2 class="mb-2 text-xl text-darkNavy font-semibold leading-none text-gray-900 md:text-2xl dark:text-white">{{ obj.property_address }}</h2>
+            <p class="flex flex-row space-x-4 mb-4"><span class="text-xl font-bold leading-none text-gray-900 md:text-2xl dark:text-white">£ {{ obj.property_price.price|floatformat:"-3g" }}</span><span class="text-base font-semibold leading-none text-gray-900 md:text-2xl dark:text-white">{{ obj.property_price.price_type}}</span></p>
+            <p class="mb-4 text-base font-bold leading-none text-gray-900 md:text-base dark:text-white">Added at {{ obj.added_at }}</p>
+            <div>
+                <h1 class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">Features</h1>
+                <div class="flex flex-row space-x-4 mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">
+                    <h5>Type: {{ obj.property_feature.property_type }}</h5>
+                    <h5>Rooms: {{ obj.property_feature.bedroom }}</h5>
+                    <h5>Toilets: {{ obj.property_feature.toilet }}</h5>
+                </div>
+            </div>
+            <div class="flex items-center space-x-6">
+                <div>
+                    <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">Description</dt>
+                    <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{ obj.description }}</dd>
+                </div>
+            </div>
+        </div>
+
+        <div id="map" class="py-8 px-4 mx-auto" style="height: 400px; width: 50%;"></div>
+    </div>
+</section>
+
+
+<script>
+window.addEventListener("DOMContentLoaded", showMap)
+
+async function showMap(){
+    let objId = document.getElementById('object').dataset.id;
+    let data = await fetchLocationData(objId);
+    (g=>{var h,a,k,p="The Google Maps JavaScript API",
+        c="google",
+        l="importLibrary",
+        q="__ib__",
+        m=document,
+        b=window;
+        b=b[c]||(b[c]={});
+        var d=b.maps||(b.maps={}),
+        r=new Set,
+        e=new URLSearchParams,
+        u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));
+        e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);
+        e.set("callback",c+".maps."+q);
+        a.src=`https://maps.${c}apis.com/maps/api/js?`+e;
+        d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));
+        a.nonce=m.querySelector("script[nonce]")?.nonce||"";
+        m.head.append(a)}));
+        d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})({
+            key: data.api_key,
+            v: "weekly",
+    });
+    let map;
+    initMap(data);
+}
+
+async function fetchLocationData(objId) {
+    let url = `/property/${objId}/map/`
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
+
+async function initMap(data) {
+  const position = data.location_coor;
+  const { Map } = await google.maps.importLibrary("maps");
+  const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
+
+  map = new Map(document.getElementById("map"), {
+    zoom: 14,
+    center: position,
+    mapId: `map-${data.property_id}`,
+  });
+
+  const marker = new AdvancedMarkerElement({
+    map: map,
+    position: position,
+    title: JSON.stringify(position),
+  });
+}
+
+
+// like button functions
+const btn = document.getElementById('like-btn')
+
+btn.addEventListener('click', ()=>{
+    let id = btn.dataset.id
+    handleLikeBtn(id)
+})
+
+function handleLikeBtn(id){
+    const xhr = new XMLHttpRequest()
+    xhr.open('POST', `/property/${id}/add-to-wishlist/`, true);
+    xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            const response = JSON.parse(xhr.responseText);
+            const likeIcon = document.getElementById('like-icon')
+            if(response.liked){
+                likeIcon.setAttribute ('fill', "currentColor")
+            }else {
+                likeIcon.setAttribute ('fill', "none")
+            }
+        }
+    }
+    xhr.send();
+}
+
+</script>
+
+{% endblock %}

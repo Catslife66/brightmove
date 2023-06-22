@@ -1,0 +1,34 @@
+{% extends 'sub_base.html' %}
+{% load widget_tweaks %}
+
+{% block content %}
+<section class="bg-white dark:bg-gray-900">
+    <div class="lg:py-16 px-4 mx-auto">
+        <div class="mx-auto max-w-2xl text-center">
+            <h2 class="mb-4 text-2xl tracking-tight font-bold text-center text-darkNavy dark:text-white">Contact sales</h2>
+            <p class="mb-8 lg:mb-16 font-light text-center text-darkNavy dark:text-gray-400 sm:text-xl">Aute magna irure deserunt veniam aliqua magna enim voluptate.</p>
+        </div>
+        <form action="." method="post" class="mx-auto mt-16 max-w-xl sm:mt-20">
+            {% csrf_token %}
+            <div>
+                <label for="{{ form.email_from.id_for_label}}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">{{ form.email_from.label }}</label>
+                {% render_field form.email_from class+="w-full shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500 dark:shadow-sm-light" %}
+            </div>
+            <div>
+                <label for="{{ form.send_to.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">{{ form.send_to.label }}</label>
+                {% render_field form.send_to class+="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500 dark:shadow-sm-light" %}
+            </div>
+            <div>
+                <label for="{{ form.subject.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">{{ form.subject.label }}</label>
+                {% render_field form.subject class+="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500 dark:shadow-sm-light" %}
+            </div>
+            <div class="sm:col-span-2">
+                <label for="{{ form.message.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">{{ form.message.label }}</label>
+                {% render_field form.message class+="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg shadow-sm border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" rows="6" %}
+            </div>
+            <button type="submit" class="py-3 px-5 text-sm font-medium text-center text-white rounded-lg bg-lakeBlue sm:w-fit hover:bg-darkNavy focus:ring-4 focus:outline-none focus:ring-lakeBlue dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Send</button>
+        </form>
+    </div>
+</section>
+
+{% endblock %}
