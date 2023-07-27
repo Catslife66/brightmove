@@ -1,13 +1,15 @@
+from django.contrib import admin
 from django.db import models
 from django.db.models import Q
 from django.conf import settings
-from django.db.models.signals import post_save
-from django.dispatch import receiver
+from django.db.models.query import QuerySet
+
+from account.models import User
 
 
 class PropertyQuerySet(models.QuerySet):
     def filter_by_location(self, location):
-        return self.filter(property_address__town__iexact=location)
+        return self.filter(property_address__town__iexact=location, is_active=True)
 
 
 class PropertySearchManger(models.Manager):
@@ -24,7 +26,7 @@ class Property(models.Model):
     added_at = models.DateField(auto_now_add=True)
     updated_at = models.DateField(auto_now=True)
     for_sale = models.BooleanField(default=True)
-    is_active = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=False)
     views_count = models.IntegerField(default=0)
 
     objects = models.Manager()
@@ -32,6 +34,21 @@ class Property(models.Model):
 
     class Meta:
         verbose_name_plural = 'properties'
+
+    @admin.display
+    def property_object(self):
+        return f"property object({self.pk})"
+    
+
+    def save(self, *args, **kwargs):
+        if self.pk:
+            if User.is_superuser:
+                super().save(*args, **kwargs)
+            else:
+                self.is_active = self.__class__.objects.get(pk=self.pk).is_active
+                super().save(*args, **kwargs)
+        else:
+            super().save(*args, **kwargs)
 
 
 class Address(models.Model):
@@ -80,9 +97,25 @@ class PropertyPrice(models.Model):
     ]
     price_type = models.CharField(max_length=20, choices=PRICE_TYPE_CHOICES, default='Offers over')
     price = models.BigIntegerField()
+    reduced_active = models.BooleanField(default=False)
+    increased_active = models.BooleanField(default=False)
     added_at = models.DateField(auto_now_add=True)
     updated_at = models.DateField(auto_now=True)
-    
+
+
+class RentalPrice(models.Model):
+    property = models.OneToOneField(Property, on_delete=models.CASCADE, related_name='rent')
+    deposit = models.DecimalField(max_digits=7, decimal_places=2)
+    monthly_price = models.DecimalField(max_digits=7, decimal_places=2)
+    weekly_price = models.DecimalField(max_digits=7, decimal_places=2, blank=True, null=True)
+    added_at = models.DateField(auto_now_add=True)
+    updated_at = models.DateField(auto_now=True)
+
+    def save(self, *args, **kwargs):
+        if self.weekly_price is None:
+            self.weekly_price = round(self.monthly_price / 4)
+        super().save( *args, **kwargs)
+
 
 class PropertyImage(models.Model):
     property = models.ForeignKey(Property, on_delete=models.CASCADE, related_name='images')
@@ -95,19 +128,6 @@ class PropertyImage(models.Model):
         if self.is_feature:
             PropertyImage.objects.filter(property=self.property).update(is_feature=False)
         super().save(*args, **kwargs)
-
-
-@receiver(post_save, sender=PropertyImage)
-def post_save_property_image(sender, instance, **kwargs):
-    feature_img = PropertyImage.objects.filter(property=instance.property, is_feature=True)
-    has_feature_img = feature_img.exists()
-    if not has_feature_img:
-        first_img = PropertyImage.objects.filter(property=instance.property).first()
-        first_img.is_feature=True
-        first_img.save()
-    if has_feature_img and len(feature_img) > 1 :
-        first_feature_img = feature_img.first()
-        feature_img.exclude(pk=first_feature_img.pk).update(is_feature=False)
 
 
 class PropertyWishList(models.Model):

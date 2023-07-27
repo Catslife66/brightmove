@@ -41,6 +41,19 @@
                         <span class="ml-3 text-lakeBlue font-semibold">My property</span>
                     </button>
                 </li>
+                <li class="py-4 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                    <button class="flex flex-row flex-1 justify-between mx-4 items-center" id="notification-btn"
+                        hx-get="{% url 'notification:notification-list' %}"
+                        hx-trigger="click"
+                        hx-target="#main-content"
+                        hx-swap="innerHTML">
+                        <svg aria-hidden="true" class="flex-shrink-0 w-6 h-6 text-gray-400 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M8.707 7.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l2-2a1 1 0 00-1.414-1.414L11 7.586V3a1 1 0 10-2 0v4.586l-.293-.293z"></path><path d="M3 5a2 2 0 012-2h1a1 1 0 010 2H5v7h2l1 2h4l1-2h2V5h-1a1 1 0 110-2h1a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V5z"></path></svg>
+                        <span class="flex-1 ml-3 whitespace-nowrap text-lakeBlue font-semibold">Messages</span>
+                        <span id="notification-count" class="inline-flex justify-center items-center w-5 h-5 text-xs text-darkNavy font-semibold rounded-full text-white bg-lakeBlue dark:bg-primary-200 dark:text-primary-800">
+                            
+                        </span>
+                    </button>
+                </li>
             </ul>
             
         </div>
@@ -52,5 +65,47 @@
         <div id="password-form">{% include 'account/password-change-form.html' with form=password_form %}</div>
     </main>
   </div>
+
+  <script>
+    
+    let url = '/notifications/count/'
+
+    window.addEventListener("DOMContentLoaded", ()=>{
+        pollNotificationCount();
+        //setInterval(pollNotificationCount, 20000)
+    })
+
+    const targetSpan = document.getElementById('notification-count')
+    const targetBtn = document.getElementById('notification-btn')
+    targetBtn.addEventListener('click', updateBackendNotificationCount)
+
+    function updateBackendNotificationCount(){
+        let xhr = new XMLHttpRequest()
+        let now = new Date()
+        xhr.open('post', url, true)
+        xhr.setRequestHeader('context-type', 'application/json')
+        xhr.setRequestHeader('X-CSRFToken', csrftoken)
+        xhr.onload = function(){
+            if (xhr.status === 200){
+                targetSpan.textContent = 0
+            }
+        }
+        let timeString = now.toISOString()
+        let timeData = JSON.stringify({ updatechecked: timeString })
+        xhr.send(timeData)
+    }
+
+    function pollNotificationCount(){
+        fetch(url)
+        .then(response =>  response.json())
+        .then(data => {
+            targetSpan.textContent = data.unchecked_count
+            //console.log(`get method${data.unchecked_count}`)
+        })
+        .catch(error => {
+            console.error('Error fetching notification count:', error);
+        });
+    }
+  </script>
 
 {% endblock %}

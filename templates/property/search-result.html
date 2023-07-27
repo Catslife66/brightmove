@@ -91,7 +91,13 @@
                 <h5>Rooms: {{ obj.property_feature.bedroom }}</h5>
                 <h5>Toilets: {{ obj.property_feature.toilet }}</h5>
             </div>
+            {% if obj.property_price.reduced_active %}
+            <span class="px-4 text-lakeBlue font-bold">Reduced at {{ obj.updated_at }}</span>
+            {% elif obj.property_price.increased_active %}
+            <span class="px-4 text-lakeBlue font-bold">Updated at {{ obj.updated_at }}</span>
+            {% else %}
             <span class="px-4 text-lakeBlue font-bold">Added at {{ obj.added_at }}</span>
+            {% endif %}
             <p class="px-4 font-normal text-gray-700 dark:text-gray-400">{{ obj.description|slice:":250" }}....</p>
             <div class="flex flex-row grow justify-between items-center bg-lakeBlue">
                 <div class="text-white px-4 text-xl tracking-wide font-bold">{{ obj.property_price.price_type }}</div>

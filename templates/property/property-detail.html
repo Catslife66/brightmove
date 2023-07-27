@@ -52,7 +52,13 @@
         <div class="py-8 px-4 mx-auto max-w-2xl lg:py-16" id="object" data-id="{{ obj.id }}">
             <h2 class="mb-2 text-xl text-darkNavy font-semibold leading-none text-gray-900 md:text-2xl dark:text-white">{{ obj.property_address }}</h2>
             <p class="flex flex-row space-x-4 mb-4"><span class="text-xl font-bold leading-none text-gray-900 md:text-2xl dark:text-white">£ {{ obj.property_price.price|floatformat:"-3g" }}</span><span class="text-base font-semibold leading-none text-gray-900 md:text-2xl dark:text-white">{{ obj.property_price.price_type}}</span></p>
+            {% if obj.property_price.reduced_active %}
+            <p class="mb-4 text-base font-bold leading-none text-gray-900 md:text-base dark:text-white">Reduced at {{ obj.updated_at }}</p>
+            {% elif obj.property_price.increased_active %}
+            <p class="mb-4 text-base font-bold leading-none text-gray-900 md:text-base dark:text-white">Updated at {{ obj.updated_at }}</p>
+            {% else %}
             <p class="mb-4 text-base font-bold leading-none text-gray-900 md:text-base dark:text-white">Added at {{ obj.added_at }}</p>
+            {% endif %}
             <div>
                 <h1 class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">Features</h1>
                 <div class="flex flex-row space-x-4 mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">

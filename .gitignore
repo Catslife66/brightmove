@@ -8,8 +8,8 @@ venv/
 env/
 .env
 
-# Ignore static files
-
+# Ignore migration files
+migrations/
 
 # Ignore media files
 media/

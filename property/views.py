@@ -13,11 +13,18 @@ from account.visitor import Visitor
 from .models import Property, PropertyImage, PropertyWishList, LocationSearchTracking
 from .forms import PropertyAddressForm, PropertyFeatureForm, PropertyPriceForm, PropertyUploadForm, ImageInlineFormset, EmailForm
 from .utils import get_location_coordinates
+from notification.models import Notification
 
 
 def search_by_location(request):
     location = request.GET.get('location')
+    sale = request.GET.get('sale')
+    let = request.GET.get('let')
     qs = Property.location.filter_by_loaction(location)
+    if sale:
+        qs = qs.filter(for_sale=True)
+    if let:
+        qs = qs.filter(for_sale=False)
     try:
         search_loacation = LocationSearchTracking.objects.get(location__iexact=location)
         search_loacation.increment_count()
@@ -251,22 +258,10 @@ def email_owner(request, pk):
         subject = form.cleaned_data['subject']
         message = form.cleaned_data['message']
         send_mail(subject=subject, message=message, from_email=sender, recipient_list=[send_to])
+        msg = f"Someone sent you an email regard to property on {property_obj.property_address}"
+        Notification.objects.create(sender=request.user, recipient=property_obj.owner, property=property_obj, message=msg)
         return HttpResponse('Email sent successfully.')
     
     context = {'form': form}
     return render(request, 'property/email_owner.html', context)
 
-
-# def my_wishlist(request):
-#     if request.user.is_authenticated:
-#         wishlist_items = PropertyWishList.objects.filter(user_id=request.user.id)
-#     else:
-#         user = Visitor(request)
-#         wishlist = user.get('liked_property')
-#         wishlist_items = []
-#         for i in wishlist:
-#             obj = Property.objects.get(id=i)
-#             wishlist_items.append(obj)
-    
-#     context = {'qs': wishlist_items}
-#     return render(request, '')

@@ -1,0 +1,25 @@
+<div class="w-full dark:bg-gray-800 dark:border-gray-700">
+    {% if obj_list %}
+        {% for obj in obj_list %}
+        <div class="p-4 mb-4 bg-white border border-gray-200 shadowrounded-lg md:p-8 dark:bg-gray-800">
+            {% if obj.is_read %}
+            <h2 class="mb-3 text-3xl font-extrabold tracking-tight text-lakeBlue dark:text-white">You have a new message from {{ obj.recipient }}</h2>
+            <p class="mb-3 text-lakeBlue dark:text-gray-400">{{ obj.message }}</p>
+            <a href="#" class="inline-flex items-center font-medium text-lakeBlue hover:text-darkNavy dark:text-blue-500 dark:hover:text-blue-700">
+                Learn more
+                <svg class="w-6 h-6 ml-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
+            </a>
+            {% else %}
+            <h2 class="mb-3 text-3xl font-extrabold tracking-tight text-black dark:text-white">You have a new message from {{ obj.recipient }}</h2>
+            <p class="mb-3 text-black dark:text-gray-400">{{ obj.message }}</p>
+            <a href="#" class="inline-flex items-center font-medium text-black hover:text-darkNavy dark:text-blue-500 dark:hover:text-blue-700">
+                Learn more
+                <svg class="w-6 h-6 ml-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
+            </a>
+            {% endif %}
+        </div>
+        {% endfor %}
+    {% else %}
+        <p>You have no notifications.</p>
+    {% endif %}
+</div>

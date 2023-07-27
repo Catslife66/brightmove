@@ -6,7 +6,10 @@
             <form action="{% url 'property:search' %}" method="get" class="flex flex-col items-center space-y-4">
                 <h1 class="text-3xl font-semibold text-center py-2">Find Your Dream Home</h1>
                 <input class="w-2/3 bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" type="text" placeholder="Enter a location" name="location">
-                <button class="text-white bg-lakeBlue hover:bg-bgLakeBlue hover:text-darkNavy focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="submit">Search</button>
+                <div class="flex flex-row space-x-6">
+                    <input type="submit" name="sale" value="For Sale" class="text-white bg-lakeBlue hover:bg-bgLakeBlue hover:text-darkNavy focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                    <input type="submit" name="let" value="To Let" class="text-white bg-lakeBlue hover:bg-bgLakeBlue hover:text-darkNavy focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                </div>  
              </form>
         </div>
     </div>

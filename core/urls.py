@@ -11,6 +11,7 @@ urlpatterns = [
     path('property/', include('property.urls')),
     path('account/', include('account.urls')),
     path('accounts/', include('allauth.urls')),
+    path('notifications/', include('notification.urls')),
 ]
 
 if settings.DEBUG:   
